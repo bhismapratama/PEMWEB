@@ -16,7 +16,6 @@ buttonTambah.addEventListener('click', () => {
     let datas = Number(document.getElementById('input1').value);
     let datas2 = Number(document.getElementById('input2').value);
     let checkTambah = datas+datas2
-
     tambah.innerHTML = "ini tambah = " + checkTambah;
 })
 
@@ -52,7 +51,6 @@ buttonMod.addEventListener('click', () => {
 buttonAll.addEventListener('click', () => {
     let datas = Number(document.getElementById('input1').value);
     let datas2 = Number(document.getElementById('input2').value);
-    
     let checkTambah = datas+datas2
     let checkKurang = datas-datas2
     let checkBagi = datas/datas2
