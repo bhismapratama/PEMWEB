@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Info Cuaca Hari ini</title>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>cuaca di sini</h1>
+        <input type="text" placeholder="infokan kota..." id="inputKotaKak" />
+        <button onclick="infoCuacaMazzeh()">info cuaca</button>
+        <h3 id="infoKota"></h3>
+        <h3 id="infoDesk"></h3>
+        <h3 id="infoAwan"></h3>
+        <h3 id="infoSuhu"></h3>
+        <h3 id="infoKelembapan"></h3>
+        <h3 id="infoTekanan"></h3>
+        <h3 id="infoAngin"></h3>
+    </div>
+
+    <script>
+        function infoCuacaMazzeh() {
+            // nah ini buat apiKeynya (soalnya ga open source)
+            const apiKey = '9f0afe1eafb8b0286ee1a59305c569a6';
+
+            // ini buat dapetin value waktu kamu ketik di search itu
+            const kota = document.getElementById('inputKotaKak').value;
+
+            // nah ini buat data supaya di proses di XML Http Req
+            const datas = new XMLHttpRequest();
+
+            // nah ini buat dapetin datanya (pakai method get)
+            datas.open(
+                'GET',
+                `https://api.openweathermap.org/data/2.5/weather?q=${kota}&appid=${apiKey}`,
+                true
+            );
+
+            // klo ini buat load functionnya (coba lihat di button, kan ada onclick tuhh)
+            datas.onload = function () {
+                if (datas.status >= 200 && datas.status < 400) {
+                    const response = JSON.parse(datas.responseText);
+                    const kota = response.name;
+                    const awan = (response.clouds.all) + 3;
+                    const suhu = (response.main.temp / 10) + 3;
+                    const kelembapan = (response.main.humidity) + 3;
+                    const tekanan = (response.main.pressure) + 3;
+                    const angin = (response.wind.speed) + 3;
+                    const deskripsi = response.weather[0].description;
+                    infoKota.innerHTML = `kamu pilih kota: ${kota}`;
+                    infoDesk.innerHTML = `hari ini cuacanya: ${deskripsi} (maap inggris dikit)`;
+                    infoAwan.innerHTML = `awannya normal lah yaa, interval : ${awan}`;
+                    infoSuhu.innerHTML = `suhunya sih segini: ${suhu} deg`;
+                    infoKelembapan.innerHTML = `untuk kelembapan segini: ${kelembapan} %`;
+                    infoTekanan.innerHTML = `tekanan daerahnya juga interval segini: ${tekanan}`;
+                    infoAngin.innerHTML = `nah anginnya lumayan lah yaa ga kenceng-kenceng amat : ${angin}`;
+                } else {
+                    console.error('Error Mazzeh');
+                    throw new Error;
+                }
+            };
+
+            datas.onerror = function () {
+                console.error('Error Mazzeh');
+                throw new Error;
+            };
+
+            datas.send();
+        }
+    </script>
+</body>
+
+</html>

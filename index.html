@@ -1,66 +1,87 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
-    <title>Info Cuaca Hari ini</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Film Aku sama Kamu kapan</title>
     <style>
         .container {
             text-align: center;
             margin-top: 50px;
         }
+
+        .card-body h1 {
+            text-align: center;
+        }
+
+        .moviesName {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="container">
-        <h1>cuaca di sini</h1>
-        <input type="text" placeholder="infokan kota..." id="inputKotaKak" />
-        <button onclick="infoCuacaMazzeh()">info cuaca</button>
-        <h3 id="infoKota"></h3>
-        <h3 id="infoDesk"></h3>
-        <h3 id="infoAwan"></h3>
-        <h3 id="infoSuhu"></h3>
-        <h3 id="infoKelembapan"></h3>
-        <h3 id="infoTekanan"></h3>
-        <h3 id="infoAngin"></h3>
-    </div>
+    <section class="d-flex align-items-center justify-content-center flex-column">
+        <h1 class="mt-4">cari film</h1>
+        <div class="gap-3 d-flex mb-3">
+            <input type="text" placeholder="infokan nama film..." id="inputFilmKak" />
+            <input type="date" placeholder="tahun berapa tuh" id="inputFilmKak" />
+            <select class="" id="">
+                <option value="movie">movie</option>
+                <option value="series">series</option>
+                <option value="episode">episode</option>
+                <option value="game">game</option>
+            </select>
+        </div>
+        <button onclick="infoFilmKak()">cari film</button>
+
+
+        <div class="card mt-5 p-4">
+            <div id="img" class="text-center">foto kamu</div>
+            <div class="card-body">
+                <h2 id="title">Nama Film</h2>
+                <div class="moviesName">
+                    <h3 id="type">Type</h3>
+                    <p id="year">2002</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
-        function infoCuacaMazzeh() {
+        function infoFilmKak() {
             // nah ini buat apiKeynya (soalnya ga open source)
-            const apiKey = '9f0afe1eafb8b0286ee1a59305c569a6';
+            const apiKey = '99190b38';
+            const datas = new XMLHttpRequest();
 
             // ini buat dapetin value waktu kamu ketik di search itu
-            const kota = document.getElementById('inputKotaKak').value;
-
-            // nah ini buat data supaya di proses di XML Http Req
-            const datas = new XMLHttpRequest();
+            const film = document.getElementById('inputFilmKak').value;
 
             // nah ini buat dapetin datanya (pakai method get)
             datas.open(
                 'GET',
-                `https://api.openweathermap.org/data/2.5/weather?q=${kota}&appid=${apiKey}`,
+                `http://www.omdbapi.com/?t=${film}&apikey=${apiKey}`,
                 true
             );
 
             // klo ini buat load functionnya (coba lihat di button, kan ada onclick tuhh)
             datas.onload = function () {
-                if (datas.status >= 200 && datas.status < 400) {
+                if (datas.status == 200) {
                     const response = JSON.parse(datas.responseText);
-                    const kota = response.name;
-                    const awan = (response.clouds.all) + 3;
-                    const suhu = (response.main.temp / 10) + 3;
-                    const kelembapan = (response.main.humidity) + 3;
-                    const tekanan = (response.main.pressure) + 3;
-                    const angin = (response.wind.speed) + 3;
-                    const deskripsi = response.weather[0].description;
-                    infoKota.innerHTML = `kamu pilih kota: ${kota}`;
-                    infoDesk.innerHTML = `hari ini cuacanya: ${deskripsi} (maap inggris dikit)`;
-                    infoAwan.innerHTML = `awannya normal lah yaa, interval : ${awan}`;
-                    infoSuhu.innerHTML = `suhunya sih segini: ${suhu} deg`;
-                    infoKelembapan.innerHTML = `untuk kelembapan segini: ${kelembapan} %`;
-                    infoTekanan.innerHTML = `tekanan daerahnya juga interval segini: ${tekanan}`;
-                    infoAngin.innerHTML = `nah anginnya lumayan lah yaa ga kenceng-kenceng amat : ${angin}`;
+                    console.log(response);
+                    const Poster = response.Poster;
+                    const Title = response.Title;
+                    const Year = response.Year;
+                    const Type = response.Type;
+                    img.innerHTML = `<img src="${Poster}" class="card-img-top" alt="...">`
+                    title.innerHTML = `${Title}`
+                    type.innerHTML = `${Type}`;
+                    year.innerHTML = `${Year}`;
                 } else {
                     console.error('Error Mazzeh');
                     throw new Error;
@@ -75,6 +96,10 @@
             datas.send();
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
